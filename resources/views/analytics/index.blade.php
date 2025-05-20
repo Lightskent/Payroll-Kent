@@ -45,7 +45,7 @@
    @php
     $employees = $departments->flatMap->employees;
 
-    $labels = $employees->pluck('name'); // This should now work
+    $labels = $employees->pluck('name');
     $salaries = $employees->map(fn($e) => $e->salary->amount ?? 0);
     $payrolls = $employees->map(fn($e) => $e->payrollRecords->sum('amount'));
 @endphp

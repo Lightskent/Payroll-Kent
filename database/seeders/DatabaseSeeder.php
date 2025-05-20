@@ -13,29 +13,33 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        $departments = Department::factory()->count(3)->create();
+    // Manually create 2 specific departments
+         $departments = collect([
+             Department::create(['name' => 'Human Resources']),
+             Department::create(['name' => 'Finance']),
+            ]);
 
-        // Create 10 employees and link them to departments
-        $employees = Employee::factory()->count(10)->create();
+    // Create 10 employees and assign to one of the above departments
+         $employees = Employee::factory()->count(10)->make();
 
-        // Assign employees to departments randomly
-        $employees->each(function ($employee) use ($departments) {
-            // Assign department to employee (linking employee to a department)
+         $employees->each(function ($employee) use ($departments) {
             $employee->department_id = $departments->random()->id;
             $employee->save();
 
-            // Create salary for each employee
-            Salary::factory()->create([
-                'employee_id' => $employee->id,
-                'amount' => rand(3000, 8000),  // Random salary amount
-            ]);
+        // Create salary
+        Salary::factory()->create([
+            'employee_id' => $employee->id,
+            'amount' => rand(3000, 8000),
+        ]);
 
-            // Create payroll records for each employee
-            PayrollRecord::factory()->count(2)->create([
+        // Create 2 payroll records
+        for ($i = 0; $i < 2; $i++) {
+            PayrollRecord::factory()->create([
                 'employee_id' => $employee->id,
-                'amount' => rand(1000, 3000),  // Random payroll amount
-                'paid_at' => now()->subDays(rand(1, 30)),  // Random payment date
+                'amount' => rand(1000, 3000),
+                'paid_at' => now()->subDays(rand(1, 30)),
             ]);
-        });
-    }
+        }
+    });
+    }   
 }

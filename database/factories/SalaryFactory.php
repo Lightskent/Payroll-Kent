@@ -13,8 +13,8 @@ class SalaryFactory extends Factory
     public function definition()
     {
         return [
-            'employee_id' => Employee::factory(),  // Link this salary to an employee
-            'amount' => $this->faker->numberBetween(3000, 8000),  // Random salary amount
-        ];
+            'employee_id' => null,
+            'amount' => $this->faker->numberBetween(3000, 8000),
+         ];
     }
 }
